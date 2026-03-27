@@ -1,4 +1,5 @@
 {
+  "id": "f4c5a04c-52f9-457c-abae-245fbf319883",
   "title": "Lernziel-Review-Workflow (Chat Debugging) V1.2",
   "description": "User erstellt ein Lernziel. Experte bewertet es. Tutor gibt Feedback.",
   "tools": [
