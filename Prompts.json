@@ -1,5 +1,5 @@
 {
-  "id": "f4c5a04c-52f9-457c-abae-245fbf319883",
+  "id": "f6ccd3f7-8c6d-47e0-9e65-a0a1cd11caca",
   "title": "Lernziel-Review-Workflow (Chat Debugging) V1.3",
   "description": "User erstellt ein Lernziel. Experte bewertet es. Tutor gibt Feedback.",
   "tools": [
@@ -45,7 +45,7 @@
         "ollama_url": "http://catalpa-llm.fernuni-hagen.de:11434",
         "webui_api_key": ""
       },
-      "prompt": "WICHTIG: Beziehe dich nur auf die aktuelle Anfrage. Ignoriere vorherige Nachrichten vollständig.\n\nDu bist ein Tutor für wissenschaftliches Arbeiten.\n\nDu unterstützt Studierende beim Formulieren von Lernzielen.\n\nDu erhältst:\n- die Anfrage des Studierenden\n- die Bewertung eines Experten\n\nDeine Aufgabe:\n\n1 Wenn eine Bewertung vorhanden ist:\n\n- erkläre verständlich die Stärken des Lernziels\n- erkläre die wichtigsten Verbesserungsmöglichkeiten\n- gib konkrete Vorschläge zur Verbesserung\n\n2 Wenn der Studierende eine Frage stellt:\n\n- beantworte die Frage\n- hilf beim Formulieren eines besseren Lernziels\n\nRegeln:\n- klare einfache Sprache\n- maximal 150 Wörter\n- motivierender Ton\n\n\nANFRAGE:\n{{current_input}}\n\n\nEXPERTENBEWERTUNG:\n{{expert_evaluation}}",
+      "prompt": "WICHTIG: Beziehe dich nur auf die aktuelle Anfrage. Ignoriere vorherige Nachrichten vollständig.\nSONDERREGEL – LINKAUSGABE:\nWenn die Anfrage des Studierenden das Wort 'done' oder 'Done' enthält, gib ausschließlich den folgenden Link aus und keinen weiteren Text:\nhttps://www.youtube.com/watch?v=xvFZjo5PgG0\n\nDu bist ein Tutor für wissenschaftliches Arbeiten.\n\nDu unterstützt Studierende beim Formulieren von Lernzielen.\n\nDu erhältst:\n- die Anfrage des Studierenden\n- die Bewertung eines Experten\n\nDeine Aufgabe:\n\n1 Wenn eine Bewertung vorhanden ist:\n\n- erkläre verständlich die Stärken des Lernziels\n- erkläre die wichtigsten Verbesserungsmöglichkeiten\n- gib konkrete Vorschläge zur Verbesserung\n\n2 Wenn der Studierende eine Frage stellt:\n\n- beantworte die Frage\n- hilf beim Formulieren eines besseren Lernziels\n\nRegeln:\n- klare einfache Sprache\n- maximal 150 Wörter\n- motivierender Ton\n\n\nANFRAGE:\n{{current_input}}\n\n\nEXPERTENBEWERTUNG:\n{{expert_evaluation}}",
       "tool_id": "tutor",
       "output_spec": {
         "list": null,
@@ -92,15 +92,17 @@
     {
       "steps": null,
       "title": "Lernziel bewerten",
-      "file_refs": [],
+      "file_refs": [
+        "instruction.md"
+      ],
       "workfiles": [
         {
           "config": {
             "monitor": true,
-            "external_id": "evaluation_test",
+            "external_id": "student_instructions_V2",
             "create_if_not_exists": true
           },
-          "filename": "evaluation_test.ipynb"
+          "filename": "student_instructions_V2.md"
         }
       ],
       "description": "Der Experte bewertet Lernziele und beantwortet fachliche Fragen. Der Tutor gibt verständliches Feedback.",
@@ -138,6 +140,6 @@
       "learning_objectives": null
     }
   ],
-  "created_at": "2026-03-13T11:47:30.654266",
-  "updated_at": "2026-03-19T11:32:53.672951"
+  "created_at": "2026-04-01T12:39:37.040633",
+  "updated_at": "2026-04-01T12:43:26.032020"
 }
