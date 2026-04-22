@@ -4,6 +4,37 @@
   "description": "User erstellt ein Lernziel. Experte bewertet es. Tutor gibt Feedback.",
   "tools": [
     {
+      "tool_id": "done_checker",
+      "access": {
+        "model": "gemma3:4b",
+        "provider": "",
+        "webui_url": "",
+        "ollama_url": "http://catalpa-llm.fernuni-hagen.de:11434",
+        "webui_api_key": ""
+      },
+      "prompt": "Antworte nur mit DONE, wenn der Input das Wort 'done' oder 'Done' enthält. Sonst antworte nur mit NONE.\n\nINPUT:\n{{current_input}}",
+      "output_spec": {
+        "type": "text"
+        "publish_triggers": [
+          {
+            "source": "var",
+            "name": "current_input"
+          }
+        ]
+        },
+      "payload_spec": {
+      "sources": [
+        {
+          "name": "current_input",
+          "event": null,
+          "source": "var",
+          "default": "",
+          "description": "Nachricht des Nutzers"
+          }
+        ]
+      }
+    },
+    {
       "access": {
         "model": "gemma3:4b",
         "provider": "",
@@ -52,7 +83,7 @@
         "ollama_url": "http://catalpa-llm.fernuni-hagen.de:11434",
         "webui_api_key": ""
       },
-      "prompt": "Du bist ein Tutor für wissenschaftliches Arbeiten.\n\nDu unterstützt Studierende beim Formulieren von Lernzielen.\n\nDu erhältst:\n- die Anfrage des Studierenden\n- die Bewertung eines Experten\n\nFORMAT DER EXPERTENBEWERTUNG:\n\nDie Expertenbewertung besteht aus fünf numerischen Werten und einer kurzen Begründung.\n\nFormat:\nspecific_goal=X; measurable_outcome=X; importance=X; realistic_plan=X; total_score=X; summary=TEXT\n\nBedeutung der Werte:\n- specific_goal: Wie konkret das Lernziel formuliert ist (0 = vage, 2 = sehr konkret)\n- measurable_outcome: Ob ein überprüfbares Ergebnis vorhanden ist (0 = kein Ergebnis, 2 = Fortschritt über Zeit)\n- importance: Ob ein klarer Grund oder ein Ziel genannt wird (0 = kein Grund, 2 = konkretes Ziel wie Prüfung)\n- realistic_plan: Ob ein strukturierter Lernplan vorhanden ist (0 = keiner, 2 = mehrere Methoden + Zeitrahmen)\n- total_score: Summe aller vier Kategorien (0-8)\n\nRegeln zur Nutzung:\n- Interpretiere die Zahlen korrekt anhand ihrer Bedeutung.\n- Niedrige Werte (0-1) zeigen Verbesserungsbedarf.\n- Hohe Werte (2) zeigen Stärken.\n- Nutze die summary als zusätzliche Erklärung des Experten.\n- Beziehe dich in deinem Feedback direkt auf die Schwächen und Stärken der einzelnen Kategorien.\n\nDeine Aufgabe:\n\n1 Wenn eine Bewertung vorhanden ist:\n\n- erkläre verständlich die Stärken des Lernziels\n- erkläre die wichtigsten Verbesserungsmöglichkeiten\n- gib Vorschläge zur Verbesserung\n\n2 Wenn der Studierende eine Frage stellt:\n\n- beantworte die Frage\n- hilf beim Formulieren eines besseren Lernziels\n\nRegeln:\n- klare einfache Sprache\n- maximal 150 Wörter\n\nSONDERREGEL - LINKAUSGABE:\nWenn die Anfrage des Studierenden nur das Wort 'done' oder 'Done' enthält, gib ausschließlich den folgenden Link aus und keinen weiteren Text:\nhttps://www.youtube.com/watch?v=xvFZjo5PgG0\n\n\nANFRAGE:\n{{current_input}}\n\n\nEXPERTENBEWERTUNG:\n{{expert_evaluation}}",
+      "prompt": "Du bist ein Tutor für wissenschaftliches Arbeiten.\n\nDu unterstützt Studierende beim Formulieren von Lernzielen.\n\nDu erhältst:\n- die Anfrage des Studierenden\n- die Bewertung eines Experten\n\nFORMAT DER EXPERTENBEWERTUNG:\n\nDie Expertenbewertung besteht aus fünf numerischen Werten und einer kurzen Begründung.\n\nFormat:\nspecific_goal=X; measurable_outcome=X; importance=X; realistic_plan=X; total_score=X; summary=TEXT\n\nBedeutung der Werte:\n- specific_goal: Wie konkret das Lernziel formuliert ist (0 = vage, 2 = sehr konkret)\n- measurable_outcome: Ob ein überprüfbares Ergebnis vorhanden ist (0 = kein Ergebnis, 2 = Fortschritt über Zeit)\n- importance: Ob ein klarer Grund oder ein Ziel genannt wird (0 = kein Grund, 2 = konkretes Ziel wie Prüfung)\n- realistic_plan: Ob ein strukturierter Lernplan vorhanden ist (0 = keiner, 2 = mehrere Methoden + Zeitrahmen)\n- total_score: Summe aller vier Kategorien (0-8)\n\nRegeln zur Nutzung:\n- Interpretiere die Zahlen korrekt anhand ihrer Bedeutung.\n- Niedrige Werte (0-1) zeigen Verbesserungsbedarf.\n- Hohe Werte (2) zeigen Stärken.\n- Nutze die summary als zusätzliche Erklärung des Experten.\n- Beziehe dich in deinem Feedback direkt auf die Schwächen und Stärken der einzelnen Kategorien.\n\nDeine Aufgabe:\n\n1 Wenn eine Bewertung vorhanden ist:\n\n- erkläre verständlich die Stärken des Lernziels\n- erkläre die wichtigsten Verbesserungsmöglichkeiten\n- gib Vorschläge zur Verbesserung\n\n2 Wenn der Studierende eine Frage stellt:\n\n- beantworte die Frage\n- hilf beim Formulieren eines besseren Lernziels\n\nRegeln:\n- klare einfache Sprache\n- maximal 150 Wörter\n\nANFRAGE:\n{{current_input}}\n\n\nEXPERTENBEWERTUNG:\n{{expert_evaluation}}",
       "tool_id": "tutor",
       "output_spec": {
         "list": null,
@@ -129,21 +160,35 @@
           "trigger": null,
           "description": null,
           "payload_spec": null
+        },
+        {
+          "role": "done_checker",
+          "event": "done_check",
+          "default": "not_started",
+          "trigger": {
+            "source": "var",
+            "name": "current_input"
+          }
+          "description": null,
+          "payload_spec": null
         }
       ],
       "required_skills": null,
       "expected_methods": null,
       "learning_materials": null,
-      "completion_criteria": {
-        "name": "Tutor",
-        "event": "state",
-        "source": "tool",
-        "expected_value": null,
-        "numeric_condition": {
-          "op": ">=",
-          "threshold": 1
-        }
-      },
+      "completion_op": "any",
+      "completion_criteria": [
+        {
+          "name": "DoneChecker",
+          "event": "done_check",
+          "source": "tool",
+          "expected_value": "DONE",
+          "completion_message": "Super, du hast die Aufgabe abgeschlossen!\n\n[Weiter](www.youtube.com/watch?v=xvFZjo5PgG0)",
+          "completion_message_role": "System",
+          "completion_message_type": "completion",
+          "completion_message_classification": "process"
+         }
+      ],
       "learning_objectives": null
     }
   ],
