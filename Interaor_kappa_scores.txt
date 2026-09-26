@@ -1,8 +1,8 @@
 === Cohen's Kappa Ergebnisse ===
 
-                            V1.2    
-specific_goal:              0.091
-measurable_outcome:         0.286
-importance:                 0.189
-realistic_multisource_plan: 0.167
-total_score:                0.111
+Version                              V1.1      V1.2      V1.3
+specific_goal:                       0.231     0.412     0.275
+measurable_outcome:                  0.286     0.565     0.429
+importance:                          0.444     0.492     0.667
+realistic_multisource_plan:          0.265     0.531     0.464
+total_score:                         0.101     0.101     0.121
